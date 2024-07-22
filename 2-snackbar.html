@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="icon" type="image/svg+xml" href="/vanilla-app-template/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    
+    <title>Page 3</title>
+    <script type="module" crossorigin src="/vanilla-app-template/commonHelpers2.js"></script>
+    <link rel="modulepreload" crossorigin href="/vanilla-app-template/assets/modulepreload-polyfill-3cfb730f.js">
+    <link rel="modulepreload" crossorigin href="/vanilla-app-template/assets/vendor-77e16229.js">
+    <link rel="stylesheet" href="/vanilla-app-template/assets/vendor-7a007824.css">
+    <link rel="stylesheet" href="/vanilla-app-template/assets/2-snackbar-5097002b.css">
+    <link rel="stylesheet" href="/vanilla-app-template/assets/styles-915bac5e.css">
+  </head>
+  <body>
+    <header class="header">
+      <h1>Welcome to page 3</h1>
+      <nav class="nav">
+        <ul class="nav-list">
+          <li class="nav-item">
+            <a href="/1-timer.html" class="nav-link">Page 2</a>
+          </li>
+          <li class="nav-item">
+            <a href="/index.html" class="nav-link">Go to home</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <section>
+      <form class="form">
+        <label class="label">
+          <span>Delay (ms)</span>
+          <input class="delay-input" type="number" name="delay" required />
+        </label>
+
+        <fieldset>
+          <legend>State</legend>
+          <label>
+            <input type="radio" name="state" value="fulfilled" required />
+            Fulfilled
+          </label>
+          <label>
+            <input type="radio" name="state" value="rejected" required />
+            Rejected
+          </label>
+        </fieldset>
+
+        <button type="submit">Create notification</button>
+      </form>
+    </section>
+    
+  </body>
+</html>
