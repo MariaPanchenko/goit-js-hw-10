@@ -1,0 +1,113 @@
+// Описаний в документації
+import flatpickr from 'flatpickr';
+// Додатковий імпорт стилів
+import 'flatpickr/dist/flatpickr.min.css';
+
+// Описаний у документації
+import iziToast from 'izitoast';
+// Додатковий імпорт стилів
+import 'izitoast/dist/css/iziToast.min.css';
+
+const dataPickerEl = document.querySelector('#datetime-picker');
+const buttonEl = document.querySelector('button');
+const deysEl = document.querySelector('[data-days]');
+const hoursEl = document.querySelector('[data-hours]');
+const minutesEl = document.querySelector('[data-minutes]');
+const secondsEl = document.querySelector('[data-seconds]');
+
+let currentDate = new Date();
+let selectedDate = null;
+let deltaTime = null;
+let intervalId = null;
+let isValidDate = true;
+
+buttonEl.addEventListener('click', onStartTimer);
+
+const options = {
+  enableTime: true,
+  time_24hr: true,
+  defaultDate: new Date(),
+  minuteIncrement: 1,
+  onClose(selectedDates) {
+    selectedDate = selectedDates[0];
+
+    isValidDate = selectedDate > currentDate;
+
+    if (isValidDate) {
+      deltaTime = selectedDate - currentDate;
+    }
+
+    buttonEl.removeAttribute('disabled');
+  },
+};
+
+flatpickr(dataPickerEl, options);
+
+function onStartTimer() {
+  if (isValidDate) {
+    buttonEl.setAttribute('disabled', 'true');
+    dataPickerEl.setAttribute('disabled', 'true');
+    updateComponentsTimer(convertMs(deltaTime));
+    startTimer();
+  } else {
+    buttonEl.setAttribute('disabled', 'true');
+    iziToast.show({
+      timeout: 3000,
+      position: 'topRight',
+      title: 'Please choose a date in the future',
+    });
+  }
+}
+
+function pad(value) {
+  return String(value).padStart(2, '0');
+}
+
+function convertMs(ms) {
+  // Number of milliseconds per unit of time
+  const second = 1000;
+  const minute = second * 60;
+  const hour = minute * 60;
+  const day = hour * 24;
+
+  // Remaining days
+  const days = pad(Math.floor(ms / day));
+  // Remaining hours
+  const hours = pad(Math.floor((ms % day) / hour));
+  // Remaining minutes
+  const minutes = pad(Math.floor(((ms % day) % hour) / minute));
+  // Remaining seconds
+  const seconds = pad(Math.floor((((ms % day) % hour) % minute) / second));
+
+  return { days, hours, minutes, seconds };
+}
+
+function startTimer() {
+  intervalId = setInterval(() => {
+    stopTimer();
+
+    deltaTime -= 1000;
+    convertMs(deltaTime);
+    updateComponentsTimer(convertMs(deltaTime));
+  }, 1000);
+}
+
+function stopTimer() {
+  if (
+    (deysEl.textContent === '00') &
+    (hoursEl.textContent === '00') &
+    (minutesEl.textContent === '00') &
+    (secondsEl.textContent === '01')
+  ) {
+    clearInterval(intervalId);
+    buttonEl.removeAttribute('disabled');
+    dataPickerEl.removeAttribute('disabled');
+  }
+}
+
+function updateComponentsTimer({ days, hours, minutes, seconds }) {
+  deysEl.textContent = days.toString();
+  hoursEl.textContent = hours.toString();
+  minutesEl.textContent = minutes.toString();
+  secondsEl.textContent = seconds.toString();
+}
